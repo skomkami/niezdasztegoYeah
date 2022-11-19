@@ -25,5 +25,4 @@ case class CurrencyServiceConfig(
 case class ServiceConfig(
     database: DBConfig,
     server: ServerConfig,
-    currencyService: CurrencyServiceConfig
 )
