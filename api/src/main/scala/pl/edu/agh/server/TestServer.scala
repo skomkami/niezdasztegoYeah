@@ -16,7 +16,7 @@ import akka.http.scaladsl.server.Directives._
 import akka.stream.Materializer
 import pl.edu.agh.config.ServiceConfig
 import pl.edu.agh.database.DatabaseConnection
-import pl.edu.agh.entities.{Group, User}
+import pl.edu.agh.entities.{User}
 import pureconfig.ConfigSource
 import pureconfig.generic.auto._
 import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport._
