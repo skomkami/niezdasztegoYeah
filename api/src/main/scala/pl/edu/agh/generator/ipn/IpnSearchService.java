@@ -1,10 +1,12 @@
 package pl.edu.agh.generator.ipn;
 
-import pl.edu.agh.generator.model.IpnKnowledgeModel;
+import pl.edu.agh.generator.model.IpnSourceModel;
+
+import java.util.List;
 
 public class IpnSearchService {
 
-    public IpnKnowledgeModel searchSentences(String searchText) {
-        return new IpnKnowledgeModel();
+    public List<IpnSourceModel> getSources(String searchText, int fetchSourcesCount) {
+        return List.of();
     }
 }

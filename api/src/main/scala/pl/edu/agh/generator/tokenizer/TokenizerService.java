@@ -1,11 +1,24 @@
 package pl.edu.agh.generator.tokenizer;
 
-import pl.edu.agh.generator.model.IpnSentenceModel;
+import pl.edu.agh.generator.model.IpnSourceModel;
 
 import java.util.List;
 
 public class TokenizerService {
-    public void getTokensForSentences(List<IpnSentenceModel> sentences) {
-        // inject tokens into sentence objects
+
+    private final YearTokenService yearTokenService = new YearTokenService();
+
+    public void calculateTokensForSource(IpnSourceModel source) {
+        calculateTokensWithPythonService(source);
+        calculateTokensWithYearTokenService(source);
+    }
+
+    private void calculateTokensWithPythonService(IpnSourceModel source) {
+        // TODO to implement
+        // call REST api
+    }
+
+    private void calculateTokensWithYearTokenService(IpnSourceModel source) {
+        yearTokenService.tokenize(source);
     }
 }

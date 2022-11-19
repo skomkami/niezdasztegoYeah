@@ -4,6 +4,6 @@ import java.util.List;
 
 public class IpnSourceModel {
     public String sourceUrl;
-    public List<IpnSentenceModel> sentences;
-
+    public String sourceContent;
+    public List<TokenModel> tokens;
 }
