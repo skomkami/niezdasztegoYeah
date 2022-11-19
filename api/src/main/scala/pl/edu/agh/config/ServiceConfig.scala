@@ -12,10 +12,9 @@ case class ServerConfig(
     bindPort: Int
 )
 
-case class CurrencyServiceConfig(
+case class IPNServiceConfig(
     host: String,
-    sslEnabled: Boolean,
-    apiKey: String
+    sslEnabled: Boolean
 ) {
   private lazy val protocol = if (sslEnabled) "https" else "http"
 
@@ -25,4 +24,5 @@ case class CurrencyServiceConfig(
 case class ServiceConfig(
     database: DBConfig,
     server: ServerConfig,
+    ipnService: IPNServiceConfig
 )
