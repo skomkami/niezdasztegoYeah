@@ -3,6 +3,11 @@ import React from 'react'
 import Quest from './Quest.js';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import { textAlign } from '@mui/system';
 
 export default function QuizComponent(props) {
   const [score, setScore] = React.useState(0);
@@ -106,25 +111,27 @@ export default function QuizComponent(props) {
                 alignItems="center"
                 margin="20"
                 spacing={3}>
+      <div style={{position:"relative", width: "100%", height: "40px"}}>
+        <div style={{position: "absolute", left: "0"}}>
+          <Tooltip title="Return Back">
+              <IconButton>
+                  <ArrowBackIcon onClick={()=>{props.showStartSetter(true)}} />
+              </IconButton>
+          </Tooltip>
+        </div>
+        <div style={{position:"absolute", left:"200", right: "200", margin: "auto", text_align: "center"}}>
+          <Typography variant="h4" textAlign="center">
+              {props.topic}
+          </Typography>
+        </div>
+      </div>
       {quests}
-      {showAnswers ? (
-        <Stack direction="row">
-          <h3 className="button-container-score">
-            {"You scored " + score + "/5 correct answers"}
-          </h3>
-          <Button variant="contained" onClick={playAgain}>
-            Play Again
-          </Button>
-        </Stack>
-      ) : (
-        <Button
-          variant="contained"
-          disabled={!allComplete}
-          onClick={checkAnswers}
-        >
-          Check Answers
-        </Button>
-      )}
+      <Button variant="contained">
+        Add More Questions
+      </Button>
+      <Button variant="outlined">
+        Export to PDF
+      </Button>
     </Stack>
   );
 }
