@@ -52,9 +52,9 @@ public class ClarinService {
             } while (!isAvailable);
             ClarinGetStatusResponse responseObject = objectMapper
                     .readValue(getTaskStatusResponse, ClarinGetStatusResponse.class);
-            String resultResponse = downloadResult(responseObject.value.get(0).fileID);
-//            AppLogger.debug("downloadResult response: " + resultResponse);
-            ipnSourceModel.tokens = new ClarinResultXmlParser().parse(resultResponse);
+            String namedEntitiesXmlResponse = downloadResult(responseObject.value.get(0).fileID);
+//            AppLogger.debug("downloadResult response: " + namedEntitiesXmlResponse);
+            ipnSourceModel.tokens = new ClarinResultXmlParser().parse(namedEntitiesXmlResponse);
         } catch (URISyntaxException | IOException | InterruptedException | ParserConfigurationException e) {
             throw new RuntimeException(e);
         }
