@@ -92,6 +92,7 @@ body{
 
 .quiz-container-question-options-container{
   display: flex;
+  margin-top: 20px;
 }
 
 .quiz-container-question-options-container-option{

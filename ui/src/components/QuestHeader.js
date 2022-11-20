@@ -6,6 +6,7 @@ import TextField from '@mui/material/TextField';
 import LinkIcon from '@mui/icons-material/Link';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+import Link from '@mui/material/Link';
 
 export default function QuestHeader(props)
 {
@@ -25,9 +26,11 @@ export default function QuestHeader(props)
             </Grid>
             <Grid item xs={0.5}>
                 <Tooltip title="View Source">
+                    <Link href={props.sourceUrl} target="_blank">
                     <IconButton>
                         <LinkIcon />
                     </IconButton>
+                    </Link>
                 </Tooltip>
             </Grid>
             <Grid item xs={0.5}>

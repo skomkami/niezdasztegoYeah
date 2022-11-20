@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import { textAlign } from '@mui/system';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function QuizComponent(props) {
   const [score, setScore] = React.useState(0);
@@ -16,6 +16,7 @@ export default function QuizComponent(props) {
   const [allComplete, setAllComplete] = React.useState(false);
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const [topic, setTopic] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
 
   function playAgain() {
     props.showStartSetter(true);
@@ -56,35 +57,26 @@ export default function QuizComponent(props) {
   }, [questions, showAnswers]);
 
   React.useEffect(() => {
-    fetch("https://opentdb.com/api.php?amount=5")
-            .then(res => res.json())
-            .then(data => setQuestions(data.results.map(function(question) {
-                return({question:question.question,
-                        options:question.incorrect_answers.concat([question.correct_answer]).map(value => ({ value, sort: Math.random() })).sort((a, b) => a.sort - b.sort).map(({ value }) => value),
-                        selected_answer:undefined,
-                        correct_answer:question.correct_answer})
-            })))
-            }
-/*
-    fetch(SERVER_URL + "?fraze=" + topic)
-      .then((res) => res.json())
-      .then((data) =>
-        setQuestions(
-          data.results.map(function (question) {
-            return {
-              question: question.question,
-              options: question.incorrect_answers
-                .concat([question.correct_answer])
-                .map((value) => ({ value, sort: Math.random() }))
-                .sort((a, b) => a.sort - b.sort)
-                .map(({ value }) => value),
-              selected_answer: undefined,
-              correct_answer: question.correct_answer,
-            };
-          })
-        )
-      );
-  }*/, [topic, SERVER_URL]);
+      if(questions.length > 0) return;
+      setLoading(true);
+      /*fetch(SERVER_URL + '?' + new URLSearchParams({
+          phrase: props.topic,
+          size: 10,
+      }))*/
+      fetch('message.json')
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+        setLoading(false);
+        return setQuestions(data.questions.map(function(question) {
+          return({question:question.question,
+                  options:question.answers,
+                  selected_answer:undefined,
+                  correct_answer:question.correctAnswerIndex,
+                  sourceUrl:question.sourceUrl})
+      }))
+    })
+    })
 
   React.useEffect(() => {
     setAllComplete(
@@ -119,19 +111,33 @@ export default function QuizComponent(props) {
               </IconButton>
           </Tooltip>
         </div>
-        <div style={{position:"absolute", left:"200", right: "200", margin: "auto", text_align: "center"}}>
-          <Typography variant="h4" textAlign="center">
-              {props.topic}
+        <div style={{position:"absolute", left:"100", right: "100", margin: "auto", text_align: "center"}}>
+          <Stack>
+          <Typography variant="p" textAlign="center">
+            Test Topic:
           </Typography>
+          <Typography variant="h4" textAlign="center">
+            {props.topic}
+          </Typography>
+          </Stack>
         </div>
       </div>
+      {loading ? <CircularProgress /> : 
+      <Stack 
+      direction="column"
+      justifyContent="center"
+      alignItems="center"
+      margin="0"
+      spacing={3}
+      sx={{width:"100%"}}>
       {quests}
       <Button variant="contained">
         Add More Questions
       </Button>
       <Button variant="outlined">
         Export to PDF
-      </Button>
+      </Button></Stack>
+      }
     </Stack>
   );
 }

@@ -5,9 +5,18 @@ import Stack from '@mui/material/Stack';
 
 export default function Start(props) {
   const [topic, setTopic] = React.useState("");
+  const [isEmpty, setIsEmpty] = React.useState(false);
 
   function handleChange({ target }) {
     setTopic(target.value);
+  }
+
+  function startQuiz(topic) {
+    if(topic.trim().length <= 0){
+      setIsEmpty(true);
+      return;
+    }
+    props.startQuiz(topic)
   }
 
   return (<div class="start-container">
@@ -19,13 +28,13 @@ export default function Start(props) {
       spacing={3}>
       <h1 className="start-container-title">Quizzical</h1>
       <h2 className="start-container-subtitle">Query Your Brain</h2>
-      <TextField id="topicBox" label="Enter topic here..." variant="outlined"
+      <TextField error={isEmpty} id="topicBox" label="Enter topic here..." variant="outlined"
         value={topic}
         onChange={handleChange}
       />
       <Button
         variant="contained"
-        onClick={() => {props.startQuiz(topic)}}
+        onClick={() => {startQuiz(topic)}}
       >
         Start Quiz
       </Button>
