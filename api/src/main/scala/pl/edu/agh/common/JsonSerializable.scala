@@ -1,14 +1,10 @@
-package pl.edu.agh.entities
+package pl.edu.agh.common
 
-import io.circe.{Decoder, Encoder}
 import io.circe.generic.decoding.DerivedDecoder
 import io.circe.generic.encoding.DerivedAsObjectEncoder
 import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
+import io.circe.{Decoder, Encoder}
 import shapeless.Lazy
-
-trait Entity {
-  def id: Option[Int]
-}
 
 abstract class JsonSerializable[E] {
   implicit def jsonDecoder(implicit d: Lazy[DerivedDecoder[E]]): Decoder[E] =
@@ -19,5 +15,3 @@ abstract class JsonSerializable[E] {
   ): Encoder[E] =
     deriveEncoder[E]
 }
-
-trait EntityProperties[E <: Entity] extends JsonSerializable[E]

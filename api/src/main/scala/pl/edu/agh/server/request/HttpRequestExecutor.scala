@@ -1,4 +1,4 @@
-package pl.edu.agh.request
+package pl.edu.agh.server.request
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http

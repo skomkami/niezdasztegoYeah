@@ -1,4 +1,4 @@
-package pl.edu.agh.generator.model;
+package pl.edu.agh.common.generator.model;
 
 public class TokenModel {
     public static final String TYPE_YEAR = "YEAR";

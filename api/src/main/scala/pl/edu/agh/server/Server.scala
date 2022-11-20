@@ -8,10 +8,8 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.{ExceptionHandler, Route}
 import akka.stream.Materializer
 import pl.edu.agh.config.ServiceConfig
-import pl.edu.agh.database.DatabaseConnection
-import pl.edu.agh.gateway.UsersGateway
 import pl.edu.agh.server.routes.GenerateQuizGateway
-import pl.edu.agh.service.IPNService
+import pl.edu.agh.service.{ClarinService, IpnService, QuestionGeneratorFacade}
 import pureconfig.ConfigSource
 import pureconfig.generic.auto._
 
@@ -27,10 +25,6 @@ object Server extends App with CorsSupport {
   implicit val materializer: Materializer = Materializer(system)
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
 
-  private val dbConnection: DatabaseConnection = DatabaseConnection(
-    config.database
-  )
-
   implicit def exceptionHandler: ExceptionHandler =
     ExceptionHandler { case e: Exception =>
       extractUri { uri =>
@@ -41,12 +35,14 @@ object Server extends App with CorsSupport {
       }
     }
 
-  val usersApi = UsersGateway(dbConnection)
-  val ipnService = IPNService(config.ipnService)
-  val quizApi = GenerateQuizGateway(ipnService)
+  val ipnService = IpnService(config.ipnService)
+  val clarinService = ClarinService(config.clarinService)
+  val questionGeneratorFacade = new QuestionGeneratorFacade(ipnService, clarinService)
+  val quizApi = GenerateQuizGateway(questionGeneratorFacade)
+
 
   val route: Route = Route.seal(pathPrefix("api") {
-    usersApi.route ~ quizApi.route
+    quizApi.route
   })
 
   val bindingFuture =

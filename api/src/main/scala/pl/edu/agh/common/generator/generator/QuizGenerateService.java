@@ -1,9 +1,10 @@
-package pl.edu.agh.generator.generator;
+package pl.edu.agh.common.generator.generator;
 
-import pl.edu.agh.generator.api.GenerateQuestionsResponseBody;
-import pl.edu.agh.generator.api.QuestionDto;
-import pl.edu.agh.generator.model.IpnKnowledgeModel;
-import pl.edu.agh.generator.model.TokenModel;
+import pl.edu.agh.common.generator.model.IpnKnowledgeModel;
+import pl.edu.agh.server.dto.QuestionDto;
+import pl.edu.agh.common.generator.model.TokenModel;
+import pl.edu.agh.server.output.GeneratedQuiz;
+import pl.edu.agh.server.output.Question;
 
 import java.util.Collection;
 import java.util.List;
@@ -15,9 +16,9 @@ public class QuizGenerateService {
     private final QuestionGenerateService questionGenerateService = new QuestionGenerateService();
     private List<TokenModel> allTokens;
 
-    public GenerateQuestionsResponseBody generate(IpnKnowledgeModel ipnKnowledgeModel, int quantity) {
+    public GeneratedQuiz generate(IpnKnowledgeModel ipnKnowledgeModel, int quantity) {
         extractAllTokens(ipnKnowledgeModel);
-        return new GenerateQuestionsResponseBody(
+        return new GeneratedQuiz(
                 buildQuestions(ipnKnowledgeModel, quantity)
         );
     }
@@ -29,7 +30,7 @@ public class QuizGenerateService {
                 .collect(Collectors.toList());
     }
 
-    private List<QuestionDto> buildQuestions(IpnKnowledgeModel ipnKnowledgeModel, int quantity) {
+    private List<Question> buildQuestions(IpnKnowledgeModel ipnKnowledgeModel, int quantity) {
         return IntStream.range(0, quantity)
                 .mapToObj(el -> questionGenerateService
                         .buildSingleQuestion(ipnKnowledgeModel, allTokens))

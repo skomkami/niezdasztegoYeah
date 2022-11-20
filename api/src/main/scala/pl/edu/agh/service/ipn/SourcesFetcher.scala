@@ -1,7 +1,6 @@
-package pl.edu.agh.ipn
+package pl.edu.agh.service.ipn
 
-import pl.edu.agh.request.HttpRequestExecutor
-
+import pl.edu.agh.server.request.HttpRequestExecutor
 import scala.concurrent.{ExecutionContext, Future}
 
 case class SourcesFetcher(httpExecutor: HttpRequestExecutor)(implicit

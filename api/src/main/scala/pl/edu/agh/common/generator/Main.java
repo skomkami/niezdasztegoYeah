@@ -1,7 +1,6 @@
-package pl.edu.agh.generator;
+package pl.edu.agh.common.generator;
 
-import pl.edu.agh.generator.api.GenerateQuestionsRequestParams;
-import pl.edu.agh.generator.api.GenerateQuestionsResponseBody;
+import pl.edu.agh.service.QuestionGeneratorFacade;
 
 // TODO replace with rest invocation
 public class Main {

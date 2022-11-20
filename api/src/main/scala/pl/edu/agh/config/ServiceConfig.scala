@@ -1,18 +1,11 @@
 package pl.edu.agh.config
 
-case class DBConfig(
-    driver: String,
-    url: String,
-    user: String,
-    pass: String
-)
-
 case class ServerConfig(
     bindHost: String,
     bindPort: Int
 )
 
-case class IPNServiceConfig(
+case class ExternalServiceConfig(
     host: String,
     sslEnabled: Boolean
 ) {
@@ -22,7 +15,7 @@ case class IPNServiceConfig(
 }
 
 case class ServiceConfig(
-    database: DBConfig,
     server: ServerConfig,
-    ipnService: IPNServiceConfig
+    ipnService: ExternalServiceConfig,
+    clarinService: ExternalServiceConfig
 )

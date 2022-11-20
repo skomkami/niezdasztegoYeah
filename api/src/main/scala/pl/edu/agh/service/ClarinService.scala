@@ -1,14 +1,14 @@
 package pl.edu.agh.service
 
 import akka.actor.ActorSystem
-import pl.edu.agh.config.IPNServiceConfig
-import pl.edu.agh.ipn.{ParagraphsExtractor, SourcesExtractor, SourcesFetcher}
-import pl.edu.agh.request.HttpRequestExecutor
+import pl.edu.agh.config.ExternalServiceConfig
+import pl.edu.agh.server.request.HttpRequestExecutor
+import pl.edu.agh.service.ipn.{ParagraphsExtractor, SourcesExtractor, SourcesFetcher}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-case class IPNService(
-    config: IPNServiceConfig
+case class ClarinService(
+    config: ExternalServiceConfig
 )(implicit
     system: ActorSystem,
     ec: ExecutionContext
@@ -16,10 +16,7 @@ case class IPNService(
 
   private lazy val httpExecutor = HttpRequestExecutor()
 
-  def getResults(
-      searchText: String,
-      sizeOpt: Option[Int]
-  ): Future[List[String]] =
+  def getResults(paragraph: String): Future[List[String]] =
     httpExecutor
       .makeSingleRequestUnsafe(
         url = s"${config.url}/search",

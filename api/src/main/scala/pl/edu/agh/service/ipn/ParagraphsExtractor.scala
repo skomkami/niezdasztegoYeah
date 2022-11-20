@@ -1,4 +1,4 @@
-package pl.edu.agh.ipn
+package pl.edu.agh.service.ipn
 
 object ParagraphsExtractor {
 

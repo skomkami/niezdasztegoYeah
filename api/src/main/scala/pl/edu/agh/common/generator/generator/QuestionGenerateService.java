@@ -1,9 +1,10 @@
-package pl.edu.agh.generator.generator;
+package pl.edu.agh.common.generator.generator;
 
-import pl.edu.agh.generator.api.QuestionDto;
-import pl.edu.agh.generator.model.IpnKnowledgeModel;
-import pl.edu.agh.generator.model.IpnSourceModel;
-import pl.edu.agh.generator.model.TokenModel;
+import pl.edu.agh.common.generator.model.IpnKnowledgeModel;
+import pl.edu.agh.common.generator.model.IpnSourceModel;
+import pl.edu.agh.common.generator.model.TokenModel;
+import pl.edu.agh.server.dto.QuestionDto;
+import pl.edu.agh.server.output.Question;
 
 import java.util.Collection;
 import java.util.List;
@@ -15,7 +16,7 @@ public class QuestionGenerateService {
 
     private static final String BLANK_PLACEHOLDER = "_____";
 
-    public QuestionDto buildSingleQuestion(IpnKnowledgeModel ipnKnowledgeModel, List<TokenModel> allTokens) {
+    public Question buildSingleQuestion(IpnKnowledgeModel ipnKnowledgeModel, List<TokenModel> allTokens) {
         IpnSourceModel randomSourceModel = ipnKnowledgeModel.sourceList.get(new Random()
                 .nextInt(ipnKnowledgeModel.sourceList.size()));
 
@@ -24,7 +25,7 @@ public class QuestionGenerateService {
                 .filter(token -> token.tokenType.equals(randomToken.tokenType))
                 .collect(Collectors.toList());
 
-        return new QuestionDto(
+        return new Question(
                 randomSourceModel.sourceContent.replace(randomToken.text, BLANK_PLACEHOLDER),
                 Stream.of(List.of(randomToken), similarTokens)
                         .flatMap(Collection::stream)

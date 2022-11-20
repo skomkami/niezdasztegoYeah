@@ -1,7 +1,7 @@
-package pl.edu.agh.generator.tokenizer;
+package pl.edu.agh.common.generator.tokenizer;
 
-import pl.edu.agh.generator.model.IpnSourceModel;
-import pl.edu.agh.generator.model.TokenModel;
+import pl.edu.agh.common.generator.model.IpnSourceModel;
+import pl.edu.agh.common.generator.model.TokenModel;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

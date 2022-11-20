@@ -1,6 +1,6 @@
-package pl.edu.agh.output
+package pl.edu.agh.server.output
 
-import pl.edu.agh.entities.JsonSerializable
+import pl.edu.agh.common.JsonSerializable
 
 case class Question(
     question: String,

@@ -35,6 +35,8 @@ lazy val root = (project in file("."))
       "com.outr" %% "scribe" % scribe,
       "com.softwaremill.sttp.tapir" %% "tapir-akka-http-server" % tapirSwagger,
       "com.softwaremill.sttp.tapir" %% "tapir-swagger-ui-bundle" % tapirSwagger,
-      "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % tapirSwagger
+      "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % tapirSwagger,
+      "org.glassfish.jersey.core" % "jersey-client" % "2.22",
+      "org.json" % "json" % "20141113"
     )
   )
