@@ -7,10 +7,9 @@ import pl.edu.agh.model.TokenModel;
 import pl.edu.agh.server.output.Question;
 import scala.jdk.javaapi.CollectionConverters;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -26,6 +25,10 @@ public class QuestionGenerateService {
     private static final String SPACE = " ";
 
     public Question buildSingleQuestion(IpnKnowledgeModel ipnKnowledgeModel, List<TokenModel> allTokens) {
+        if (ipnKnowledgeModel.sourceList.isEmpty()) {
+            AppLogger.warn("No more knowledge downloaded. Skipping further generation...");
+            return null;
+        }
         IpnSourceModel randomSourceModel = ipnKnowledgeModel.sourceList.get(new Random()
                 .nextInt(ipnKnowledgeModel.sourceList.size()));
         if (randomSourceModel.tokens.size() < 1) {
@@ -42,7 +45,7 @@ public class QuestionGenerateService {
                 .map(token -> token.text)
                 .collect(Collectors.toList());
 
-        scala.collection.immutable.List<String> resultAnswers = CollectionConverters.asScala(trimAndRandomizeAnswers(possibleAnswers)).toList();
+        scala.collection.immutable.List<String> resultAnswers = CollectionConverters.asScala(trimAndRandomizeAnswers(possibleAnswers, randomToken.text)).toList();
 
         if (resultAnswers.size() < 2) {
             AppLogger.warn("Only single answer for resource. Not creating question.");
@@ -60,12 +63,13 @@ public class QuestionGenerateService {
             trimmedQuestionWithDots = trimmedQuestion;
         }
 
+        ipnKnowledgeModel.sourceList.remove(randomSourceModel);
         return new Question(
                 trimmedQuestionWithDots,
                 resultAnswers,
                 resultAnswers.indexOf(randomToken.text),
                 randomSourceModel.sourceContent,
-                randomSourceModel.sourceUrl + "#:~:text=" + URLEncoder.encode(trimmedQuestion, StandardCharsets.UTF_8).replace("+","%20")
+                randomSourceModel.sourceUrl
         );
     }
 
@@ -78,9 +82,15 @@ public class QuestionGenerateService {
         return blankedFullQuestion;
     }
 
-    private static List<String> trimAndRandomizeAnswers(List<String> answers) {
+    private static List<String> trimAndRandomizeAnswers(List<String> answers, String correctAnswer) {
         Set<String> uniqueUnorderedAnswers = new HashSet<>(answers);
-        List<String> result = new ArrayList<>(uniqueUnorderedAnswers).subList(0, Math.min(4, uniqueUnorderedAnswers.size()));
+        List<String> result = new ArrayList<>(uniqueUnorderedAnswers);
+        Collections.shuffle(result);
+        result = result.subList(0, Math.min(4, uniqueUnorderedAnswers.size()));
+        if (!result.contains(correctAnswer)) {
+            result.set(0, correctAnswer);
+            Collections.shuffle(result);
+        }
         return result;
     }
 

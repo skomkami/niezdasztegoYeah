@@ -16,7 +16,7 @@ case class GenerateQuizGateway(
         val result = questionGeneratorFacade.generate(
           new GenerateQuestionsRequestParams(
             phrase,
-            Integer.valueOf(size.getOrElse(20))
+            Integer.valueOf(size.getOrElse(30))
           )
         )
         complete(

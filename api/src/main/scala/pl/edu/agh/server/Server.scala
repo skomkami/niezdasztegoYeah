@@ -33,7 +33,7 @@ object Server extends App with CorsSupport {
           s"Request to $uri could not be handled normally. ${e.getMessage}"
         )
         e.printStackTrace()
-        complete(HttpResponse(InternalServerError, entity = e.getMessage))
+        complete(HttpResponse(InternalServerError, entity = "{}"))
       }
     }
 
