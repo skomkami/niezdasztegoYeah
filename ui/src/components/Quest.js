@@ -1,5 +1,16 @@
 import React from 'react'
 import QuestHeader from './QuestHeader.js';
+import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
+
+const Item = styled(Paper)(({ theme }) => ({
+    ...theme.typography.body2,
+    color: theme.palette.text.secondary,
+    //lineHeight: '60px',
+    width: '90%',
+    padding: '20px'
+  }));
 
 export default function Quest(props)
 {
@@ -25,16 +36,20 @@ export default function Quest(props)
     
     const options = props.question.options.map((option,index) => <button
         key={index}
-        dangerouslySetInnerHTML={{__html: option}}
         onClick={(event) => props.selectAnswer(event,props.id,index)}
         style={styler(option,index)}
         disabled={props.showAnswers}
         className='quiz-container-question-options-container-option'
-        />)
+        >
+            <TextField multiline  id="standard-basic" 
+                label="" 
+                variant="standard" 
+                defaultValue={option}
+                sx={{width: "100%"}}/>
+        </button>)
         
-    return(<div className='quiz-container-question' >
+    return(<Item elevation={6}>
         <QuestHeader question={props.question.question}/>
         <div className='quiz-container-question-options-container'>{options}</div>
-        <hr className='quiz-container-question-divider' />
-    </div>)
+    </Item>)
 }
