@@ -108,14 +108,14 @@ export default function QuizComponent(props) {
                 spacing={3}>
       {quests}
       {showAnswers ? (
-        <div className="button-container">
+        <Stack direction="row">
           <h3 className="button-container-score">
             {"You scored " + score + "/5 correct answers"}
           </h3>
-          <button className="button" onClick={playAgain}>
+          <Button variant="contained" onClick={playAgain}>
             Play Again
-          </button>
-        </div>
+          </Button>
+        </Stack>
       ) : (
         <Button
           variant="contained"

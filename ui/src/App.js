@@ -1,6 +1,19 @@
 import React, { useCallback } from "react";
 import Start from "./components/Start.js";
 import QuizComponent from "./components/QuizComponent.js";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import TopBar from "./components/TopBar.js";
+
+const theme = createTheme({
+    palette: {
+        primary: {
+        main: "#B71B1B",
+        },
+        white: {
+            main: "#ffffff"
+        }
+    },
+});
 
 export default function App() {
   const [showStart, setShowStart] = React.useState(true);
@@ -20,15 +33,18 @@ export default function App() {
   }
 
   return (
-    <div className="app">
-      {showStart ? (
-        <Start startQuiz={startQuiz} />
-      ) : (
-        <QuizComponent
-          showStartSetter={wrappersetShowStart}
-          topic={topic}
-        ></QuizComponent>
-      )}
-    </div>
+    <ThemeProvider theme={theme}>
+        <TopBar showStartSetter={wrappersetShowStart}/>
+        <div className="app">
+        {showStart ? (
+            <Start startQuiz={startQuiz} />
+        ) : (
+            <QuizComponent
+            showStartSetter={wrappersetShowStart}
+            topic={topic}
+            ></QuizComponent>
+        )}
+        </div>
+    </ThemeProvider>
   );
 }
