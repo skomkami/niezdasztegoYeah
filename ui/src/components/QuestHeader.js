@@ -8,8 +8,9 @@ import Grid from '@mui/material/Grid';
 export default function QuestHeader(props)
 {
         
-    return(<Grid container spacing={2}>
-            <Grid item xs={7}>
+    return(<div style={{'padding-left': '10px', 'padding-right': '10px'}}>
+        <Grid container spacing={2}>
+            <Grid item xs={11}>
                 <h1 className='quiz-container-question-title' dangerouslySetInnerHTML={{__html: props.question}}/>
             </Grid>
             <Grid item xs={0.5}>
@@ -27,5 +28,6 @@ export default function QuestHeader(props)
                 </Tooltip>
             </Grid>
         </Grid>
+        </div>
     )
 }

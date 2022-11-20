@@ -21,7 +21,7 @@
   font-family: 'Karla';
   font-style: normal;
   font-weight: 700;
-  font-size: 31.25px;
+  font-size: 100px;
   line-height: 37px;
   text-align: center;
   color: #293264;
@@ -31,7 +31,7 @@
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 30px;
   line-height: 19px;
   text-align: center;
 
@@ -64,6 +64,7 @@
 }
 
 .quiz-container-question{
+  padding-left: 10;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -73,7 +74,7 @@
 }
 
 .quiz-container-question-header{
-  
+
 }
 
 .quiz-container-question-title{
@@ -182,7 +183,7 @@
   position: absolute;
   margin:0px;
   top: -120px;
-  right: -80px;
+  right: 0px;
   z-index:-1;
   width:300px;
 }

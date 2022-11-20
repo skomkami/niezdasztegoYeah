@@ -1,5 +1,8 @@
-import React from "react";
-import Quest from "./Quest.js";
+
+import React from 'react'
+import Quest from './Quest.js';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
 export default function QuizComponent(props) {
   const [score, setScore] = React.useState(0);
@@ -7,11 +10,11 @@ export default function QuizComponent(props) {
   const [questions, setQuestions] = React.useState([]);
   const [allComplete, setAllComplete] = React.useState(false);
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
-  const topic = "";
+  const [topic, setTopic] = React.useState("");
 
   function playAgain() {
     props.showStartSetter(true);
-    topic = props.topic;
+    setTopic(props.topic);
     setShowAnswers(false);
     setAllComplete(false);
   }
@@ -45,9 +48,19 @@ export default function QuizComponent(props) {
       }
     }
     setScore(count);
-  }, [showAnswers]);
+  }, [questions, showAnswers]);
 
   React.useEffect(() => {
+    fetch("https://opentdb.com/api.php?amount=5")
+            .then(res => res.json())
+            .then(data => setQuestions(data.results.map(function(question) {
+                return({question:question.question,
+                        options:question.incorrect_answers.concat([question.correct_answer]).map(value => ({ value, sort: Math.random() })).sort((a, b) => a.sort - b.sort).map(({ value }) => value),
+                        selected_answer:undefined,
+                        correct_answer:question.correct_answer})
+            })))
+            }
+/*
     fetch(SERVER_URL + "?fraze=" + topic)
       .then((res) => res.json())
       .then((data) =>
@@ -66,7 +79,7 @@ export default function QuizComponent(props) {
           })
         )
       );
-  }, []);
+  }*/, [topic, SERVER_URL]);
 
   React.useEffect(() => {
     setAllComplete(
@@ -87,7 +100,12 @@ export default function QuizComponent(props) {
   });
 
   return (
-    <div className="quiz-container">
+    <Stack 
+                direction="column"
+                justifyContent="center"
+                alignItems="center"
+                margin="20"
+                spacing={3}>
       {quests}
       {showAnswers ? (
         <div className="button-container">
@@ -99,14 +117,14 @@ export default function QuizComponent(props) {
           </button>
         </div>
       ) : (
-        <button
-          className="button"
+        <Button
+          variant="contained"
           disabled={!allComplete}
           onClick={checkAnswers}
         >
           Check Answers
-        </button>
+        </Button>
       )}
-    </div>
+    </Stack>
   );
 }

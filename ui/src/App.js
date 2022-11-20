@@ -1,7 +1,6 @@
 import React, { useCallback } from "react";
 import Start from "./components/Start.js";
 import QuizComponent from "./components/QuizComponent.js";
-import blob from "./images/blob.png";
 
 export default function App() {
   const [showStart, setShowStart] = React.useState(true);
@@ -15,6 +14,7 @@ export default function App() {
   );
 
   function startQuiz(quizTopic) {
+    console.log(quizTopic);
     setTopic(quizTopic);
     setShowStart(false);
   }
@@ -26,11 +26,9 @@ export default function App() {
       ) : (
         <QuizComponent
           showStartSetter={wrappersetShowStart}
-          topic={this.topic}
+          topic={topic}
         ></QuizComponent>
       )}
-      <img className="blob1" src={blob} alt="" />
-      <img className="blob2" src={blob} alt="" />
     </div>
   );
 }
