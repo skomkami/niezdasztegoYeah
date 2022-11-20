@@ -1,8 +1,8 @@
 package pl.edu.agh.service
 
 import akka.actor.ActorSystem
-import pl.edu.agh.common.generator.model.IpnSourceModel
 import pl.edu.agh.config.ExternalServiceConfig
+import pl.edu.agh.model.IpnSourceModel
 import pl.edu.agh.server.request.HttpRequestExecutor
 import pl.edu.agh.service.ipn.{
   ParagraphsExtractor,
@@ -27,7 +27,7 @@ case class IpnService(
       searchText: String,
       sizeOpt: Int
   ) =
-    Await.result(getResults(searchText, Option(sizeOpt)), 10.seconds).asJava
+    Await.result(getResults(searchText, Option(sizeOpt)), 200.seconds).asJava
 
   def getResults(
       searchText: String,

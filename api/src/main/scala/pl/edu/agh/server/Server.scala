@@ -9,6 +9,7 @@ import akka.http.scaladsl.server.{ExceptionHandler, Route}
 import akka.stream.Materializer
 import pl.edu.agh.config.ServiceConfig
 import pl.edu.agh.server.routes.GenerateQuizGateway
+import pl.edu.agh.service.clarin.ClarinService
 import pl.edu.agh.service.{IpnService, QuestionGeneratorFacade}
 import pureconfig.ConfigSource
 import pureconfig.generic.auto._
@@ -31,15 +32,16 @@ object Server extends App with CorsSupport {
         println(
           s"Request to $uri could not be handled normally. ${e.getMessage}"
         )
+        e.printStackTrace()
         complete(HttpResponse(InternalServerError, entity = e.getMessage))
       }
     }
 
   val ipnService = IpnService(config.ipnService)
-  val clarinService = ??? //ClarinService(config.clarinService)
-  val questionGeneratorFacade =
-    new QuestionGeneratorFacade(ipnService, clarinService)
+  val clarinService = new ClarinService()
+  val questionGeneratorFacade = new QuestionGeneratorFacade(ipnService, clarinService)
   val quizApi = GenerateQuizGateway(questionGeneratorFacade)
+
 
   val route: Route = Route.seal(pathPrefix("api") {
     quizApi.route

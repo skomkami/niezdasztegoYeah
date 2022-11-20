@@ -1,16 +1,16 @@
-package pl.edu.agh.common.generator.tokenizer;
+package pl.edu.agh.service.custom;
 
-import pl.edu.agh.common.generator.model.IpnSourceModel;
-import pl.edu.agh.common.generator.model.TokenModel;
+import pl.edu.agh.model.IpnSourceModel;
+import pl.edu.agh.model.TokenModel;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class YearTokenService {
 
-    private static final Pattern PATTERN = Pattern.compile("(\\d\\d\\d\\d)\\s?r");
+    private static final Pattern PATTERN = Pattern.compile(".*(\\d\\d\\d\\d)\\s?r.*");
 
-    public void tokenize(IpnSourceModel sourceModel) {
+    public void calculateTokensForSource(IpnSourceModel sourceModel) {
         Matcher matcher = PATTERN.matcher(sourceModel.sourceContent);
         // TODO implement more than one
         if (matcher.matches() && matcher.groupCount() > 0) {

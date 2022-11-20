@@ -1,4 +1,4 @@
-package pl.edu.agh.common.generator.model;
+package pl.edu.agh.model;
 
 import java.util.List;
 
