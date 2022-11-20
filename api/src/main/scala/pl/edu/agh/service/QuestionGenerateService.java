@@ -7,6 +7,8 @@ import pl.edu.agh.model.TokenModel;
 import pl.edu.agh.server.output.Question;
 import scala.jdk.javaapi.CollectionConverters;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -63,13 +65,14 @@ public class QuestionGenerateService {
             trimmedQuestionWithDots = trimmedQuestion;
         }
 
+        String linkTextFragment = randomSourceModel.sourceContent;
         ipnKnowledgeModel.sourceList.remove(randomSourceModel);
         return new Question(
                 trimmedQuestionWithDots,
                 resultAnswers,
                 resultAnswers.indexOf(randomToken.text),
                 randomSourceModel.sourceContent,
-                randomSourceModel.sourceUrl
+                randomSourceModel.sourceUrl + "#:~:text=" + URLEncoder.encode(linkTextFragment, StandardCharsets.UTF_8).replace("+","%20")
         );
     }
 
