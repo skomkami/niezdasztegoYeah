@@ -1,4 +1,4 @@
-package pl.edu.agh.generator.api;
+package pl.edu.agh.model;
 
 public class GenerateQuestionsRequestParams {
     public String searchText;

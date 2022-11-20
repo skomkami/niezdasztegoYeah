@@ -1,5 +1,6 @@
 package pl.edu.agh.service;
 
+import pl.edu.agh.common.AppLogger;
 import pl.edu.agh.model.IpnKnowledgeModel;
 import pl.edu.agh.model.IpnSourceModel;
 import pl.edu.agh.model.TokenModel;
@@ -20,7 +21,8 @@ public class QuestionGenerateService {
     public Question buildSingleQuestion(IpnKnowledgeModel ipnKnowledgeModel, List<TokenModel> allTokens) {
         IpnSourceModel randomSourceModel = ipnKnowledgeModel.sourceList.get(new Random()
                 .nextInt(ipnKnowledgeModel.sourceList.size()));
-        if (randomSourceModel.tokens.size() < 2) {
+        if (randomSourceModel.tokens.size() < 1) {
+            AppLogger.warn("Not generating question for source. Tokens not found. Resource: " + randomSourceModel.sourceContent);
             return null;
         }
         TokenModel randomToken = randomSourceModel.tokens.get(new Random().nextInt(randomSourceModel.tokens.size()));
@@ -32,9 +34,13 @@ public class QuestionGenerateService {
                 .flatMap(Collection::stream)
                 .map(token -> token.text)
                 .collect(Collectors.toList());
+        if (answers.size() < 2) {
+            AppLogger.warn("Only single answer for resource. Not creating question.");
+            return null;
+        }
         return new Question(
                 randomSourceModel.sourceContent.replace(randomToken.text, BLANK_PLACEHOLDER),
-                CollectionConverters.asScala(answers).toList(),
+                CollectionConverters.asScala(answers.subList(0, Math.min(4,answers.size()))).toList(),
                 0,
                 randomSourceModel.sourceContent,
                 randomSourceModel.sourceUrl

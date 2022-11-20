@@ -6,8 +6,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import pl.edu.agh.common.AppLogger;
 import pl.edu.agh.model.TokenModel;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -25,7 +27,19 @@ public class ClarinResultXmlParser {
     );
 
     public List<TokenModel> parse(String resultXml) throws ParserConfigurationException {
-//        System.out.println(resultXml);
+        DocumentBuilderFactory dbf = getDocumentBuilderFactory();
+        try {
+            dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document doc = db.parse(new InputSource(new StringReader(resultXml)));
+            return parseXml(doc.getDocumentElement());
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private static DocumentBuilderFactory getDocumentBuilderFactory() throws ParserConfigurationException {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setValidating(false);
         dbf.setNamespaceAware(true);
@@ -33,21 +47,7 @@ public class ClarinResultXmlParser {
         dbf.setFeature("http://xml.org/sax/features/validation", false);
         dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
         dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-        try {
-//            dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(new InputSource(new StringReader(resultXml)));
-//            doc.getDocumentElement().normalize();
-            System.out.println("Root Element :" + doc.getDocumentElement().getNodeName());
-            System.out.println("------");
-
-
-            return parseXml(doc.getDocumentElement());
-
-        } catch (ParserConfigurationException | SAXException | IOException e) {
-            throw new RuntimeException(e);
-        }
-
+        return dbf;
     }
 
     private List<TokenModel> parseXml(Element root) {
@@ -73,6 +73,7 @@ public class ClarinResultXmlParser {
                         }
                     });
         });
+
         return result;
     }
 

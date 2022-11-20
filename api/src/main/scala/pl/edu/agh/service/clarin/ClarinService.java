@@ -3,6 +3,7 @@ package pl.edu.agh.service.clarin;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
+import pl.edu.agh.common.AppLogger;
 import pl.edu.agh.model.IpnSourceModel;
 
 import javax.ws.rs.client.Client;
@@ -40,14 +41,19 @@ public class ClarinService {
 
     public void calculateTokensForSource(IpnSourceModel ipnSourceModel) {
         try {
+            AppLogger.debug("Calculating tokens for resource " + ipnSourceModel.sourceContent);
             String taskId = startClarinTask(ipnSourceModel.sourceContent);
-            System.out.println(taskId);
-            Thread.sleep(1000);
-            String response = getTaskStatus(taskId);
-            System.out.println(response);
-            ClarinGetStatusResponse responseObject = objectMapper.readValue(response, ClarinGetStatusResponse.class);
-            System.out.println(responseObject);
+            boolean isAvailable = false;
+            String getTaskStatusResponse;
+            do {
+                getTaskStatusResponse = getTaskStatus(taskId);
+                AppLogger.debug("getTaskStatus response: " + getTaskStatusResponse);
+                isAvailable = getTaskStatusResponse.contains("DONE");
+            } while (!isAvailable);
+            ClarinGetStatusResponse responseObject = objectMapper
+                    .readValue(getTaskStatusResponse, ClarinGetStatusResponse.class);
             String resultResponse = downloadResult(responseObject.value.get(0).fileID);
+//            AppLogger.debug("downloadResult response: " + resultResponse);
             ipnSourceModel.tokens = new ClarinResultXmlParser().parse(resultResponse);
         } catch (URISyntaxException | IOException | InterruptedException | ParserConfigurationException e) {
             throw new RuntimeException(e);
