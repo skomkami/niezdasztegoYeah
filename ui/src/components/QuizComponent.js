@@ -17,6 +17,7 @@ export default function QuizComponent(props) {
   const SERVER_URL = process.env.REACT_APP_SERVER_URL;
   const [topic, setTopic] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const [initialized, setInitialized] = React.useState(false);
 
   function playAgain() {
     props.showStartSetter(true);
@@ -57,13 +58,15 @@ export default function QuizComponent(props) {
   }, [questions, showAnswers]);
 
   React.useEffect(() => {
+      if(initialized) return;
       if(questions.length > 0) return;
+      setInitialized(true)
       setLoading(true);
-      /*fetch(SERVER_URL + '?' + new URLSearchParams({
+      //fetch('message.json')
+      fetch(SERVER_URL + '?' + new URLSearchParams({
           phrase: props.topic,
           size: 10,
-      }))*/
-      fetch('message.json')
+      }))
       .then(res => res.json())
       .then(data => {
         console.log(data)
@@ -132,7 +135,7 @@ export default function QuizComponent(props) {
       sx={{width:"100%"}}>
       {quests}
       <Button variant="contained">
-        Add More Questions
+        Generate More Questions
       </Button>
       <Button variant="outlined">
         Export to PDF
