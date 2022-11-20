@@ -3,7 +3,7 @@ package pl.edu.agh.service.ipn
 /** Extracts source pages from response returned by ipn.service/search
   */
 object SourcesExtractor {
-  def extractPages(html: String): List[String] = {
+  def extractSourcePages(html: String): List[String] = {
     val result = extractResultElements(html)
     result
   }

@@ -13,7 +13,10 @@ case class GenerateQuizGateway(
       parameters("fraze", "size".as[Int].optional) { (fraze, size) =>
         complete(
           questionGeneratorFacade.generate(
-            new GenerateQuestionsRequestParams(fraze, size.getOrElse(20))
+            new GenerateQuestionsRequestParams(
+              fraze,
+              Integer.valueOf(size.getOrElse(20))
+            )
           )
         )
       }

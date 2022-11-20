@@ -1,7 +1,6 @@
 package pl.edu.agh.common.generator.generator;
 
 import pl.edu.agh.common.generator.model.IpnKnowledgeModel;
-import pl.edu.agh.server.dto.QuestionDto;
 import pl.edu.agh.common.generator.model.TokenModel;
 import pl.edu.agh.server.output.GeneratedQuiz;
 import pl.edu.agh.server.output.Question;

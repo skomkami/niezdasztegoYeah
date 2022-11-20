@@ -1,14 +1,18 @@
 package pl.edu.agh.service
 
 import akka.actor.ActorSystem
+import pl.edu.agh.common.generator.model.IpnSourceModel
 import pl.edu.agh.config.ExternalServiceConfig
-import pl.edu.agh.generator.api.GenerateQuestionsRequestParams
 import pl.edu.agh.server.request.HttpRequestExecutor
-import pl.edu.agh.service.ipn.{ParagraphsExtractor, SourcesExtractor, SourcesFetcher}
+import pl.edu.agh.service.ipn.{
+  ParagraphsExtractor,
+  SourcesExtractor,
+  SourcesFetcher
+}
 
-import scala.collection.JavaConverters.seqAsJavaListConverter
-import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration._
+import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.jdk.CollectionConverters.SeqHasAsJava
 
 case class IpnService(
     config: ExternalServiceConfig
@@ -28,7 +32,7 @@ case class IpnService(
   def getResults(
       searchText: String,
       sizeOpt: Option[Int]
-  ): Future[List[String]] =
+  ): Future[List[IpnSourceModel]] =
     httpExecutor
       .makeSingleRequestUnsafe(
         url = s"${config.url}/search",
@@ -42,20 +46,17 @@ case class IpnService(
           "doctype" -> "WEB"
         ),
         onSuccessFn = str => {
-          Right(
-            new QuestionGeneratorFacade()
-              .generate(
-                new GenerateQuestionsRequestParams(
-                  str,
-                  0
-                )
-              )
-          )
+          Right(SourcesExtractor.extractSourcePages(str))
         }
       )
       .flatMap(SourcesFetcher(httpExecutor).fetchSources)
       .map { sources =>
-        sources.flatMap(ParagraphsExtractor.extractParagraphFromSource)
+        for {
+          source <- sources
+          paragraph <- ParagraphsExtractor.extractParagraphFromSource(
+            source.source
+          )
+        } yield new IpnSourceModel(source.url, paragraph)
       }
 
 }
